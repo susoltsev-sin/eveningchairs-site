@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eveningchairs — ресурсы для AI-агентов с оплатой после заказчика</title>
+<meta name="description" content="AI-агент берёт платные датасеты, GPU и API сейчас — а платит, когда рассчитался заказчик. Ранний доступ с 30 октября.">
+<link rel="canonical" href="https://eveningchairs.com/ru">
+<link rel="alternate" hreflang="ru" href="https://eveningchairs.com/ru">
+<link rel="alternate" hreflang="en" href="https://eveningchairs.com/">
+<link rel="alternate" hreflang="x-default" href="https://eveningchairs.com/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#F5F1E8">
+
+<!-- превью ссылки в Telegram / соцсетях -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="eveningchairs">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:url" content="https://eveningchairs.com/ru">
+<meta property="og:title" content="eveningchairs — утром ресурс, вечером оплата">
+<meta property="og:description" content="Датасеты, GPU и API для AI-агентов — сейчас. Оплата — когда рассчитался заказчик. Ранний доступ с 30 октября.">
+<meta property="og:image" content="https://eveningchairs.com/og-ru.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="eveningchairs: утром ресурс — вечером оплата">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<!-- PostHog analytics loader — kept inline in <head> so the first pageview and
+     the session recording start before anything else. Project: eveningchairs, EU Cloud. -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_uZyYfuQu3dDAhx9pCHw47Nr4wKS73m9HCaJtDtob2j8m', {
+  api_host: 'https://eu.i.posthog.com',
+  person_profiles: 'identified_only',
+  capture_pageview: true,
+  capture_pageleave: true
+});
+</script>
+</head>
+<body>
+
+<svg class="svgdefs" aria-hidden="true"><defs>
+  <symbol id="chair" viewBox="0 0 48 64">
+    <path d="M14 31 C9 21 10 8 24 6 C38 8 39 21 34 31"/>
+    <path d="M17 15 C21 12 27 12 31 15"/>
+    <circle cx="24" cy="6" r="1.6" fill="currentColor" stroke="none"/>
+    <path d="M13 31 L35 31 L33 38 L15 38 Z"/>
+    <path d="M16 38 L14 60 M32 38 L34 60"/>
+    <path d="M15 55 L33 55"/>
+  </symbol>
+  <symbol id="chairmark" viewBox="0 0 48 64">
+    <path d="M14 31 C9 21 10 8 24 6 C38 8 39 21 34 31"/>
+    <path d="M13 31 L35 31 L33 38 L15 38 Z"/>
+    <path d="M16 38 L14 60 M32 38 L34 60"/>
+    <path d="M15 55 L33 55"/>
+    <circle cx="24" cy="23" r="7" fill="#A9542E" stroke="#F5F1E8" stroke-width="1.4"/>
+  </symbol>
+</defs></svg>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="brand"><svg class="chair"><use href="#chairmark"/></svg>eveningchairs</div>
+    <div class="nav-links">
+      <a href="#how" class="hide-sm">Как мы это решаем</a>
+      <span class="lang-sw" role="group" aria-label="Язык"><span class="on" aria-current="true">RU</span><a href="./?lang=en" data-setlang="en" hreflang="en" lang="en">EN</a></span>
+      <a href="https://t.me/+g5VipBrujTc2ZDIy" class="tg-link hide-sm" target="_blank" rel="noopener">Telegram</a>
+      <a href="#waitlist" class="nav-cta">Ранний доступ</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="card"><div class="card-inner">
+      <div class="chairband" aria-hidden="true">
+        <svg class="chair"><use href="#chair"/></svg><svg class="chair"><use href="#chair"/></svg>
+        <svg class="chair"><use href="#chair"/></svg><svg class="chair"><use href="#chair"/></svg>
+        <svg class="chair"><use href="#chair"/></svg><svg class="chair"><use href="#chair"/></svg>
+        <svg class="chair"><use href="#chair"/></svg>
+      </div>
+      <p class="eyebrow">B2AI дистрибьютор для агентской экономики</p>
+      <h1>Утром ресурс — вечером оплата.</h1>
+      <p class="lede"><b>AI-агент берёт платные датасеты, компьют, GPU и API сейчас — а платит, когда рассчитался заказчик.</b> Поможем подобрать, дадим попробовать, отдадим с отсрочкой.</p>
+      <div class="cta-row">
+        <button class="btn" id="heroCta">Занять место</button>
+        <span class="cta-note">Ранний доступ · открываемся <b>30 октября</b></span>
+      </div>
+    </div></div>
+
+    <div class="timeline">
+      <div class="tl-track">
+        <div class="tl-node m">
+          <p class="cap">утро</p>
+          <h4>Агенту нужен ресурс</h4>
+          <p>датасет, компьют, API или GPU — ещё до того, как он начнёт работу</p>
+        </div>
+        <div class="tl-rule"></div>
+        <div class="tl-node d">
+          <p class="cap">день</p>
+          <h4>Подбираем и отгружаем</h4>
+          <p>агент пробует ресурс и получает его в отсрочку</p>
+        </div>
+        <div class="tl-rule"></div>
+        <div class="tl-node e">
+          <p class="cap">вечер</p>
+          <h4>Заказчик платит вам</h4>
+          <p>оплата за ресурс — в момент расчёта, остальное ваше</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="problem">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Проблема</p>
+    <h2>Работа уже продана. Инструмент купить не на что.</h2>
+    <div class="problem-grid">
+      <div class="txt">
+        <p class="big">Заказчик оплатит — просто позже. А чтобы взяться за заказ, агенту нужно заранее оплатить ресурсы: платный датасет, чужой API, GPU-время, виртуальные машины. Денег на это ещё нет — заказчик платит по факту сдачи.</p>
+        <p class="big">И каждый раз перед вами встаёт выбор: заморозить свои деньги на каждый прогон или отказаться от заказа.</p>
+        <p class="big">Так ещё и агент может ошибиться и взять незнакомый ресурс вслепую — без теста и сравнения, а значит потратить деньги впустую.</p>
+      </div>
+
+      <div class="receipt">
+      <div class="stamp">3 дня разрыва</div>
+      <div class="rhead"><span>Аналитический отчёт</span><svg class="chair"><use href="#chair"/></svg></div>
+      <div class="rrow"><span class="lbl">Заказ стоит</span><span class="val pos">+ $20.00</span></div>
+      <div class="rrow"><span class="lbl">Нужно сразу — доступ к базе данных</span><span class="val neg">− $6.00 сейчас</span></div>
+      <div class="rrow"><span class="lbl">Заказчик платит</span><span class="val" style="color:var(--ink-soft)">через 3 дня</span></div>
+      <div class="rfoot">Разрыв не в деньгах, а во <b>времени</b>: платить сегодня, получать через три дня. eveningchairs отгружает ресурс сейчас и ждёт эти три дня вместе с вами.</div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="alt">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Как мы это решаем</p>
+    <h2>Отдаём ресурс сейчас. Оплату берём после заказчика.</h2>
+    <p class="big body-max">Мы поставщик: <b>не выдаём деньги, а отгружаем ресурс</b> — и помогаем агенту выбрать тот, что подходит под задачу.</p>
+
+    <div class="how-chairs" id="howStepper">
+      <div class="hc-track">
+        <button class="hc-node on" type="button" data-go="0"><span class="hc-seat"><svg class="chair"><use href="#chairmark"/></svg></span>Каталог</button>
+        <button class="hc-node" type="button" data-go="1"><span class="hc-seat"><svg class="chair"><use href="#chair"/></svg></span>Проверка</button>
+        <button class="hc-node" type="button" data-go="2"><span class="hc-seat"><svg class="chair"><use href="#chair"/></svg></span>Отсрочка</button>
+        <button class="hc-node" type="button" data-go="3"><span class="hc-seat"><svg class="chair"><use href="#chair"/></svg></span>Расчёт</button>
+      </div>
+
+      <div class="hc-stage">
+        <div class="hc-pane on">
+          <div class="hc-ill">
+            <svg class="ill" viewBox="0 0 240 170" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M24 124 H216"/>
+            <path class="s2" d="M44 124 V134 M196 124 V134"/>
+            <path class="fp" d="M50 70 V114 A22 7 0 0 0 94 114 V70"/>
+            <ellipse class="ft" cx="72" cy="70" rx="22" ry="7"/>
+            <path class="s2" d="M50 92 A22 7 0 0 0 94 92"/>
+            <path class="s2" d="M112 90 h-6 M112 100 h-6 M112 110 h-6 M150 90 h6 M150 100 h6 M150 110 h6"/>
+            <rect class="fp" x="112" y="80" width="38" height="40" rx="3"/>
+            <rect class="ft" x="122" y="90" width="18" height="20" rx="1"/>
+            <rect class="fp" x="166" y="92" width="40" height="28" rx="3"/>
+            <text class="tg" x="186" y="111" text-anchor="middle">{ }</text>
+            <circle class="ft" cx="160" cy="50" r="17"/>
+            <path d="M172 62 L186 76" stroke-width="3.5"/>
+            <path class="s2" d="M152 42 A10 10 0 0 1 164 38"/>
+            <text x="72" y="152" text-anchor="middle">данные</text>
+            <text x="131" y="152" text-anchor="middle">GPU</text>
+            <text x="186" y="152" text-anchor="middle">API</text>
+            </svg>
+          </div>
+          <div class="hc-txt">
+            <div class="hc-num">1<span>/4</span></div>
+            <h3>Агент опрашивает каталог</h3>
+            <p>Через MCP или API агент узнаёт, что есть под его задачу, и какие у этого цены, лимиты и форматы.</p>
+            <p class="hc-ex">«нужна база судебных дел, до $10»</p>
+            <div class="hc-actions">
+              <button class="btn" type="button" data-go="next">Далее →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hc-pane">
+          <div class="hc-ill">
+            <svg class="ill" viewBox="0 0 240 170" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <g transform="translate(-14 0)">
+            <path class="fp" stroke="none" d="M108 34 V64 L78 128 Q75 136 84 136 H156 Q165 136 162 128 L132 64 V34 Z"/>
+            <path class="ft" stroke="none" d="M89 104 H151 L160 127 Q162 132 156 132 H84 Q78 132 80 127 Z"/>
+            <path class="s2" d="M89 104 H151"/>
+            <path d="M108 34 V64 L78 128 Q75 136 84 136 H156 Q165 136 162 128 L132 64 V34"/>
+            <path d="M101 34 H139"/>
+            <circle class="s2" cx="113" cy="92" r="3"/>
+            <circle class="s2" cx="126" cy="80" r="2.5"/>
+            <circle class="s2" cx="118" cy="69" r="2"/>
+            <circle class="fg" stroke="none" cx="178" cy="58" r="17"/>
+            <path class="sp" d="M170 58 L176 64 L187 52" stroke-width="3"/>
+            <text x="178" y="96" text-anchor="middle">проба</text>
+            </g>
+            </svg>
+          </div>
+          <div class="hc-txt">
+            <div class="hc-num">2<span>/4</span></div>
+            <h3>Проверяет до покупки</h3>
+            <p>Пробный доступ, чтобы убедиться, что ресурс подходит под задачу, — ещё до того, как за него платить.</p>
+            <p class="hc-ex">20 пробных запросов: хватает ли покрытия</p>
+            <div class="hc-actions">
+              <button class="btn" type="button" data-go="next">Далее →</button>
+              <button class="how-back" type="button" data-go="back">← Назад</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hc-pane">
+          <div class="hc-ill">
+            <svg class="ill" viewBox="0 0 240 170" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path class="fp" d="M40 30 H94 L112 48 V128 H40 Z"/>
+            <path d="M94 30 V48 H112"/>
+            <path class="s2" d="M52 62 H100 M52 74 H100 M52 86 H84"/>
+            <circle class="sb" cx="90" cy="108" r="12"/>
+            <path class="sb" d="M84 108 L88 112 L96 103"/>
+            <path class="s2 dash" d="M122 86 H150"/>
+            <path class="s2" d="M144 80 L151 86 L144 92"/>
+            <path class="ft" d="M160 76 L172 62 H222 L210 76 Z"/>
+            <path class="fp" d="M210 76 L222 62 V112 L210 126 Z"/>
+            <rect class="fp" x="160" y="76" width="50" height="50"/>
+            <path class="s2" d="M179 76 V92 H191 V76"/>
+            <circle class="fp" cx="214" cy="34" r="13"/>
+            <path d="M214 27 V34 L219 38"/>
+            <text x="76" y="152" text-anchor="middle">заказ</text>
+            <text x="191" y="152" text-anchor="middle">ресурс</text>
+            </svg>
+          </div>
+          <div class="hc-txt">
+            <div class="hc-num">3<span>/4</span></div>
+            <h3>Показывает заказ — получает ресурс в отсрочку</h3>
+            <p>Авансированный или подтверждённый заказ — и мы отгружаем ресурс сразу. Владелец агента вносит небольшой депозит, а не полную стоимость.</p>
+            <p class="hc-ex">заказ $20 → доступ за $6 сегодня, депозит $1</p>
+            <div class="hc-actions">
+              <button class="btn" type="button" data-go="next">Далее →</button>
+              <button class="how-back" type="button" data-go="back">← Назад</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hc-pane">
+          <div class="hc-ill">
+            <svg class="ill" viewBox="0 0 240 170" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <text class="tn" x="120" y="30" text-anchor="middle">eveningchairs</text>
+            <!-- труба: заказчик → мы → владелец -->
+            <rect class="ft" x="46" y="63" width="146" height="14"/>
+            <path d="M46 57 V83 M192 57 V83"/>
+            <path class="s2" d="M82 66 l5 4 l-5 4 M156 66 l5 4 l-5 4"/>
+            <rect class="ft" x="113" y="88" width="14" height="20"/>
+            <path class="s2" d="M116 94 l4 5 l4 -5"/>
+            <!-- оплата заказчика едет по трубе -->
+            <circle class="fb" cx="64" cy="70" r="8"/>
+            <text class="tp" x="64" y="74" text-anchor="middle" style="font-size:11px">$</text>
+            <circle class="fb" cx="176" cy="70" r="8"/>
+            <text class="tp" x="176" y="74" text-anchor="middle" style="font-size:11px">$</text>
+            <!-- мы -->
+            <circle class="fp" cx="120" cy="70" r="22"/>
+            <use href="#chairmark" x="108" y="53" width="24" height="32" stroke-width="2.6"/>
+            <!-- наша доля -->
+            <circle class="fb" cx="120" cy="120" r="9"/>
+            <text class="tp" x="120" y="124.5" text-anchor="middle" style="font-size:11px">$</text>
+            <!-- заказчик: человек или агент -->
+            <circle class="fp" cx="26" cy="70" r="16"/>
+            <circle cx="26" cy="64" r="4.5"/>
+            <path d="M17 81 Q18 71 26 71 Q34 71 35 81"/>
+            <!-- кошелёк владельца агента -->
+            <rect class="fp" x="198" y="58" width="36" height="26" rx="3"/>
+            <path class="s2" d="M202 58 V54 H226 V58"/>
+            <rect class="ft" x="220" y="65" width="14" height="12" rx="2"/>
+            <circle class="fg" stroke="none" cx="226" cy="71" r="2"/>
+            <text x="1" y="106">заказчик</text>
+            <text x="216" y="106" text-anchor="middle">вам</text>
+            <text x="120" y="148" text-anchor="middle">нам: покрытие расхода</text>
+            <text x="120" y="161" text-anchor="middle">+ комиссия</text>
+            </svg>
+          </div>
+          <div class="hc-txt">
+            <div class="hc-num">4<span>/4</span></div>
+            <h3>Заказчик платит — рассчитываемся</h3>
+            <p>Оплата заказчика идёт через нас: в момент расчёта забираем стоимость ресурса и комиссию, остаток сразу уходит владельцу агента. Без счетов и напоминаний.</p>
+            <p class="hc-ex">заказчик платит $20 → $6 и комиссия нам, остальное вам</p>
+            <div class="hc-actions">
+              <button class="btn" type="button" data-go="waitlist">Занять место →</button>
+              <button class="how-back" type="button" data-go="back">← Назад</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="layer">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Интеграционный слой</p>
+    <h2>Один MCP вместо десятка интеграций.</h2>
+    <p class="big body-max">Агент ходит не в API каждого облака, а в наш MCP. Дальше — наша работа: мы знаем продукты в портфеле, держим интеграции с вендорами и отдаём агенту результат в одном формате.</p>
+
+    <div class="layer-ill">
+      <svg class="ill ill-wide" viewBox="0 0 720 230" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect class="fp" x="20" y="80" width="130" height="70" rx="3"/>
+        <text class="tv" x="85" y="112" text-anchor="middle">AI-агент</text>
+        <text x="85" y="132" text-anchor="middle">tools/call</text>
+        <path d="M150 115 H262"/>
+        <path class="s2" d="M186 110 l5 5 l-5 5 M198 110 l5 5 l-5 5 M210 110 l5 5 l-5 5"/>
+        <text x="204" y="98" text-anchor="middle">один MCP</text>
+        <path class="s2" d="M338 115 C420 115 420 30 500 30 M338 115 C420 115 420 72 500 72 M338 115 H500 M338 115 C420 115 420 156 500 156 M338 115 C420 115 420 198 500 198"/>
+        <text x="419" y="16" text-anchor="middle">наши интеграции</text>
+        <circle class="fp" cx="300" cy="115" r="38" stroke-width="2.5"/>
+        <use href="#chairmark" x="283" y="92" width="34" height="45" stroke-width="2.6"/>
+        <text class="tn" x="300" y="176" text-anchor="middle">eveningchairs</text>
+        <text x="300" y="192" text-anchor="middle">MCP-сервер</text>
+        <rect class="fp" x="500" y="14" width="200" height="32" rx="3"/><text class="tv" x="516" y="35">GPU-облака</text>
+        <rect class="fp" x="500" y="56" width="200" height="32" rx="3"/><text class="tv" x="516" y="77">Датасеты</text>
+        <rect class="fp" x="500" y="98" width="200" height="32" rx="3"/><text class="tv" x="516" y="119">LLM API</text>
+        <rect class="fp" x="500" y="140" width="200" height="32" rx="3"/><text class="tv" x="516" y="161">Поиск и парсинг</text>
+        <rect class="fp" x="500" y="182" width="200" height="32" rx="3"/><text class="tv" x="516" y="203">Речь и перевод</text>
+      </svg>
+      <svg class="ill ill-tall" viewBox="0 0 320 450" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect class="fp" x="95" y="10" width="130" height="58" rx="3"/>
+        <text class="tv" x="160" y="36" text-anchor="middle">AI-агент</text>
+        <text x="160" y="55" text-anchor="middle">tools/call</text>
+        <path d="M160 68 V122"/>
+        <path class="s2" d="M155 84 l5 5 l5 -5 M155 96 l5 5 l5 -5"/>
+        <text x="174" y="99">один MCP</text>
+        <path class="s2" d="M160 236 V250 H40 V424 M40 280 H60 M40 316 H60 M40 352 H60 M40 388 H60 M40 424 H60"/>
+        <text x="172" y="254">наши интеграции</text>
+        <circle class="fp" cx="160" cy="160" r="38" stroke-width="2.5"/>
+        <use href="#chairmark" x="143" y="137" width="34" height="45" stroke-width="2.6"/>
+        <text class="tn" x="160" y="216" text-anchor="middle">eveningchairs</text>
+        <text x="160" y="231" text-anchor="middle">MCP-сервер</text>
+        <rect class="fp" x="60" y="266" width="220" height="28" rx="3"/><text class="tv" x="76" y="285">GPU-облака</text>
+        <rect class="fp" x="60" y="302" width="220" height="28" rx="3"/><text class="tv" x="76" y="321">Датасеты</text>
+        <rect class="fp" x="60" y="338" width="220" height="28" rx="3"/><text class="tv" x="76" y="357">LLM API</text>
+        <rect class="fp" x="60" y="374" width="220" height="28" rx="3"/><text class="tv" x="76" y="393">Поиск и парсинг</text>
+        <rect class="fp" x="60" y="410" width="220" height="28" rx="3"/><text class="tv" x="76" y="429">Речь и перевод</text>
+      </svg>
+      <svg class="ill ill-mob" viewBox="0 0 340 226" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect class="fp" x="8" y="20" width="112" height="50" rx="3"/>
+        <text class="tv" x="64" y="42" text-anchor="middle">AI-агент</text>
+        <text x="64" y="59" text-anchor="middle">tools/call</text>
+        <path d="M120 45 H173"/>
+        <path class="s2" d="M136 40 l5 5 l-5 5 M147 40 l5 5 l-5 5"/>
+        <text x="146" y="31" text-anchor="middle">один MCP</text>
+        <circle class="fp" cx="205" cy="45" r="31" stroke-width="2.5"/>
+        <use href="#chairmark" x="191" y="27" width="28" height="37" stroke-width="2.6"/>
+        <text class="tn" x="243" y="41">eveningchairs</text>
+        <text x="243" y="56">MCP-сервер</text>
+        <path class="s2" d="M205 76 V110 M90 110 H255 M90 110 V124 M255 110 V124"/>
+        <text x="8" y="104">наши интеграции</text>
+        <rect class="fp" x="8" y="124" width="164" height="27" rx="3"/><text class="tv" x="20" y="142">GPU-облака</text>
+        <rect class="fp" x="8" y="158" width="164" height="27" rx="3"/><text class="tv" x="20" y="176">Датасеты</text>
+        <rect class="fp" x="8" y="192" width="164" height="27" rx="3"/><text class="tv" x="20" y="210">LLM API</text>
+        <rect class="fp" x="178" y="124" width="156" height="27" rx="3"/><text class="tv" x="190" y="142">Поиск и парсинг</text>
+        <rect class="fp" x="178" y="158" width="156" height="27" rx="3"/><text class="tv" x="190" y="176">Речь и перевод</text>
+      </svg>
+    </div>
+
+    <div class="layer-grid">
+      <div>
+        <ol class="layer-points">
+          <li><span class="lp-n">1</span><div><b>Один вход, один счёт</b><span>Один MCP-сервер и один ключ вместо регистрации у каждого вендора. Одна схема ответов, одна история расходов.</span></div></li>
+          <li><span class="lp-n">2</span><div><b>Знаем продукты в портфеле</b><span>Цены, лимиты, форматы и подводные камни каждого вендора. Подскажем агенту, что взять под задачу, и дадим попробовать. Где у нас партнёрские условия с вендором — агент видит это прямо в ответе.</span></div></li>
+          <li><span class="lp-n">3</span><div><b>Отсрочка встроена в вызов</b><span>Ресурс идёт через нас — поэтому отсрочка работает прямо в вызове, без отдельных платежей вендору. Лимит растёт по истории вызовов и расчётов.</span></div></li>
+        </ol>
+        <div class="chips"><span class="chip">MCP</span><span class="chip">REST API</span><span class="chip">x402</span><span class="chip">Stripe</span><span class="chip">USDC</span></div>
+      </div>
+      <div class="listing" role="img" aria-label="Пример: агент вызывает инструменты MCP eveningchairs">
+        <div class="ltop"><svg class="chair"><use href="#chair"/></svg>агент → eveningchairs MCP</div>
+<pre><span class="c"># агент ищет ресурс под задачу</span>
+tools/call <span class="k">catalog.search</span>
+{ <span class="k">"task"</span>: <span class="s">"research"</span>, <span class="k">"budget"</span>: <span class="n">10</span> }
+
+<span class="c"># пробует и берёт в отсрочку</span>
+tools/call <span class="k">orders.create</span>
+{
+  <span class="k">"sku"</span>:         <span class="s">"data.api/premium"</span>,
+  <span class="k">"trial_first"</span>: <span class="n">true</span>,
+  <span class="k">"order_proof"</span>: <span class="s">"ord_9f2…"</span>,
+  <span class="k">"job_amount"</span>:  <span class="n">20.00</span>,
+  <span class="k">"price"</span>:       <span class="n">6.00</span>,
+  <span class="k">"deposit"</span>:     <span class="n">1.00</span>
+}
+
+<span class="c"># ответ: доступ уже идёт через нас</span>
+{ <span class="k">"approved"</span>: <span class="n">true</span>,
+  <span class="k">"endpoint"</span>: <span class="s">"mcp://eveningchairs/data.api"</span>,
+  <span class="k">"pay_on"</span>: <span class="s">"customer_payment"</span> }</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="growth" class="alt">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Почему отсрочка окупается</p>
+    <h2>Отсрочка стоит денег. Отказ от заказов — дороже.</h2>
+    <p class="big body-max">Банкиры это знают давно: бизнес с оборотным капиталом растёт быстрее. С агентом то же самое — либо он берёт только те заказы, на которые хватает своих денег, либо <b>платит немного за отсрочку и берёт все</b>.</p>
+
+    <div class="growth-grid">
+      <div class="receipt">
+        <div class="stamp">7 заказов упущено</div>
+        <div class="rhead"><span>Без отсрочки</span></div>
+        <div class="rrow"><span class="lbl">Заказов пришло за 3 дня</span><span class="val">12</span></div>
+        <div class="rrow"><span class="lbl">Своих денег на ресурсы</span><span class="val">$30.00</span></div>
+        <div class="rrow"><span class="lbl">Хватило на</span><span class="val">5 заказов</span></div>
+        <div class="rrow total"><span class="lbl">Заработок за эти 3 дня</span><span class="val pos">+ $70.00</span></div>
+        <div class="rfoot">5 × ($20 − $6). Свои деньги вернутся только через 3 дня, когда заплатят заказчики, — остальные <b>7 заказов ушли конкурентам</b>.</div>
+      </div>
+      <div class="receipt win">
+        <div class="stamp ok">× 2,2 заработка</div>
+        <div class="rhead"><span>С отсрочкой eveningchairs</span></div>
+        <div class="rrow"><span class="lbl">Заказов пришло за 3 дня</span><span class="val">12</span></div>
+        <div class="rrow"><span class="lbl">Своих денег на депозиты</span><span class="val">$12.00</span></div>
+        <div class="rrow"><span class="lbl">Комиссия за отсрочку</span><span class="val neg">− $12.00</span></div>
+        <div class="rrow total"><span class="lbl">Заработок за эти 3 дня</span><span class="val pos">+ $156.00</span></div>
+        <div class="rfoot">12 × ($20 − $6 − $1). Своих денег заморожено меньше, а <b>заработок — в 2,2 раза больше</b>.</div>
+      </div>
+    </div>
+    <p class="case-fine">Цифры — пример: заказ $20, ресурс $6, заказчик платит через 3 дня, депозит и комиссия — по $1 на заказ.</p>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Кейсы</p>
+    <div class="cases-head">
+      <h2>Пять заказов, которые агент может выполнить с нами</h2>
+      <div class="case-nav">
+        <button class="case-btn" data-dir="-1" aria-label="Предыдущий кейс">←</button>
+        <span class="case-count"><b id="caseNow">1</b> / 5</span>
+        <button class="case-btn" data-dir="1" aria-label="Следующий кейс">→</button>
+      </div>
+    </div>
+
+    <div class="case-track" id="caseTrack" tabindex="0" aria-label="Кейсы: листайте вбок">
+      <article class="receipt case" data-case="due-diligence">
+        <div class="stamp">7 дней разрыва</div>
+        <div class="rhead"><span>Due diligence для фонда</span></div>
+        <div class="case-meta"><span class="chip">платный API</span><span>Агент-аналитик проверяет три компании перед сделкой венчурного фонда.</span></div>
+        <div class="rrow"><span class="lbl">Заказ</span><span class="val pos">+ $400.00</span></div>
+        <div class="rrow"><span class="lbl">Нужно до старта — база компаний и судебных дел</span><span class="val neg">− $90.00</span></div>
+        <div class="rrow"><span class="lbl">Депозит владельца</span><span class="val">$10.00</span></div>
+        <div class="rrow"><span class="lbl">Фонд платит</span><span class="val" style="color:var(--ink-soft)">через 7 дней</span></div>
+        <div class="rfoot">Доступ к базе агент берёт у нас сегодня и сдаёт отчёт. <b>Когда фонд заплатит</b>, списываем стоимость доступа — остальное ваше.</div>
+      </article>
+      <article class="receipt case" data-case="llm-tokens">
+        <div class="stamp">10 дней разрыва</div>
+        <div class="rhead"><span>Миграция легаси-кода</span></div>
+        <div class="case-meta"><span class="chip">LLM API · токены</span><span>Агент переносит 120 000 строк легаси-кода на новый стек для финтех-компании.</span></div>
+        <div class="rrow"><span class="lbl">Заказ</span><span class="val pos">+ $2 000.00</span></div>
+        <div class="rrow"><span class="lbl">Нужно до старта — токены LLM на всю миграцию</span><span class="val neg">− $450.00</span></div>
+        <div class="rrow"><span class="lbl">Депозит владельца</span><span class="val">$45.00</span></div>
+        <div class="rrow"><span class="lbl">Заказчик платит после приёмки тестов</span><span class="val" style="color:var(--ink-soft)">через 10 дней</span></div>
+        <div class="rfoot">Токены на всю работу агент берёт через нас сразу — <b>не пополняет баланс у провайдера из своего кармана</b>. Расчёт — когда заказчик примет тесты.</div>
+      </article>
+
+      <article class="receipt case" data-case="render">
+        <div class="stamp">5 дней разрыва</div>
+        <div class="rhead"><span>Рендер каталога</span></div>
+        <div class="case-meta"><span class="chip">GPU</span><span>Агент делает 3D-рендеры 300 товаров для интернет-магазина.</span></div>
+        <div class="rrow"><span class="lbl">Заказ</span><span class="val pos">+ $600.00</span></div>
+        <div class="rrow"><span class="lbl">Нужно до старта — GPU-часы на рендер</span><span class="val neg">− $140.00</span></div>
+        <div class="rrow"><span class="lbl">Депозит владельца</span><span class="val">$15.00</span></div>
+        <div class="rrow"><span class="lbl">Магазин платит при приёмке</span><span class="val" style="color:var(--ink-soft)">через 5 дней</span></div>
+        <div class="rfoot">Мощности отгружаем сразу — рендер уходит в работу в тот же день. <b>Расчёт — когда магазин примет карточки.</b></div>
+      </article>
+
+      <article class="receipt case" data-case="fine-tune">
+        <div class="stamp">14 дней разрыва</div>
+        <div class="rhead"><span>Модель под бренд</span></div>
+        <div class="case-meta"><span class="chip">GPU · fine-tune</span><span>Агент дообучает генератор изображений на фирменном стиле клиента.</span></div>
+        <div class="rrow"><span class="lbl">Заказ</span><span class="val pos">+ $1 200.00</span></div>
+        <div class="rrow"><span class="lbl">Нужно до старта — GPU под дообучение</span><span class="val neg">− $260.00</span></div>
+        <div class="rrow"><span class="lbl">Депозит владельца</span><span class="val">$30.00</span></div>
+        <div class="rrow"><span class="lbl">Клиент платит по акту</span><span class="val" style="color:var(--ink-soft)">через 14 дней</span></div>
+        <div class="rfoot">Самый длинный разрыв — две недели до акта. Без отсрочки владелец <b>заморозил бы $260 своих</b> на всё это время.</div>
+      </article>
+
+      <article class="receipt case" data-case="market-research">
+        <div class="stamp">3 дня разрыва</div>
+        <div class="rhead"><span>Обзор рынка</span></div>
+        <div class="case-meta"><span class="chip">датасет</span><span>Агент собирает обзор рынка для питч-дека стартапа.</span></div>
+        <div class="rrow"><span class="lbl">Заказ</span><span class="val pos">+ $350.00</span></div>
+        <div class="rrow"><span class="lbl">Нужно до старта — лицензия на отраслевые данные</span><span class="val neg">− $120.00</span></div>
+        <div class="rrow"><span class="lbl">Депозит владельца</span><span class="val">$15.00</span></div>
+        <div class="rrow"><span class="lbl">Клиент платит после сдачи</span><span class="val" style="color:var(--ink-soft)">через 3 дня</span></div>
+        <div class="rfoot">Сначала агент <b>пробует выборку данных</b> и берёт лицензию, только если она подходит под задачу.</div>
+      </article>
+
+    </div>
+    <p class="case-fine">Лимит, депозит и аванс заказчика зависят от истории агента и скоринга конкретного заказа.</p>
+  </div>
+</section>
+
+<section id="who" class="alt">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Для кого</p>
+    <h2>Для агентов с настоящим заказом.</h2>
+    <p class="big body-max">Отгружаем ресурсы под <b>уже проданный результат</b> — а не под ставку, что что-то выгорит. Если оплата на другом конце видна и подтверждена, вы по адресу.</p>
+    <div class="who who-wide">
+      <div class="col yes"><h4>Подходит, если</h4><ul class="who-proof">
+        <li><b>У агента авансированный или подтверждённый заказ — и он может это доказать</b><span>контракт, эскроу-счёт на платформе, смарт-контракт, счёт заказчика</span></li>
+        <li><b>Задача понятная: сделал — получил оплату</b><span>агент может описать её модулю скоринга и комплаенса: что сдаёт и как заказчик примет работу</span></li>
+        <li><b>Нужны конкретные ресурсы до начала работы</b><span>агент понимает, какой датасет, API или GPU ему нужен и сколько это стоит</span></li>
+        <li><b>За агентом стоит владелец — человек или компания</b><span>он проходит проверку личности и отвечает за действия агента</span></li>
+      </ul></div>
+      <div class="col no"><h4>Не подходит, если</h4><ul>
+        <li>агент «попробует и, может, заработает»</li>
+        <li>деньги нужны на трейдинг или спекуляции</li>
+        <li>заказа пока нет — только идея</li>
+        <li>агент покупает впечатление, а не рабочий ресурс</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="waitlist">
+  <div class="wrap">
+    <p class="kicker" style="justify-content:center"><svg class="chair"><use href="#chair"/></svg>Ранний доступ</p>
+    <h2 style="text-align:center; margin-left:auto; margin-right:auto;">Займите место до запуска</h2>
+    <p class="big" style="text-align:center; max-width:50ch; margin:0 auto;">Первое окно маленькое — приоритет владельцам агентов с подтверждёнными заказами.</p>
+
+    <div class="form-card">
+      <div class="mode-tabs" role="tablist" aria-label="Как заполнить анкету">
+        <button class="mode-tab on" type="button" role="tab" aria-selected="true" data-mode="manual">Заполню сам</button>
+        <button class="mode-tab" type="button" role="tab" aria-selected="false" data-mode="agent">Спросить агента</button>
+      </div>
+      <div id="formBody">
+        <input type="text" id="company_site" name="company_site" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="mode-panel" data-mode="manual">
+          <fieldset class="field picks-field" data-required>
+            <legend>Что чаще всего требуется вашему агенту? <span class="opt">можно несколько</span></legend>
+            <div class="picks">
+              <label><input type="checkbox" name="needs" value="datasets"><span>Платные датасеты</span></label>
+              <label><input type="checkbox" name="needs" value="business_data"><span>Данные о компаниях и судах</span></label>
+              <label><input type="checkbox" name="needs" value="llm_api"><span>LLM API</span></label>
+              <label><input type="checkbox" name="needs" value="search_scraping"><span>Поиск и парсинг</span></label>
+              <label><input type="checkbox" name="needs" value="speech_translation"><span>Речь и перевод</span></label>
+              <label><input type="checkbox" name="needs" value="gpu_inference"><span>GPU: инференс, рендер</span></label>
+              <label><input type="checkbox" name="needs" value="gpu_training"><span>GPU: обучение, fine-tune</span></label>
+              <label><input type="checkbox" name="needs" value="vms"><span>Виртуальные машины</span></label>
+              <label><input type="checkbox" name="needs" value="other"><span>Другое</span></label>
+            </div>
+          </fieldset>
+          <div class="field"><label for="vendors">Какими платными сервисами уже пользуется агент? <span class="opt">необязательно</span></label>
+            <input type="text" id="vendors" name="vendors" placeholder="например: RunPod, SerpAPI, OpenAI"></div>
+          <div class="field range-field"><label for="costRange">Средняя стоимость ресурсов, необходимых агенту для выполнения заказа</label>
+            <p class="range-val empty" id="costVal">сдвиньте ползунок</p>
+            <input type="range" class="cost-range" id="costRange" name="cost_pos" data-kind="range-required" min="0" max="12" step="1" value="6"
+              data-values="0.1,0.25,0.5,1,2,5,10,25,50,100,250,500,1000" aria-describedby="costVal">
+            <div class="range-ticks" aria-hidden="true"><span style="left:0">$0.10</span><span style="left:25%">$1</span><span style="left:50%">$10</span><span style="left:75%">$100</span><span style="left:100%">$1000+</span></div>
+            <input type="hidden" id="cost" name="cost"><input type="hidden" id="costUsd" name="cost_usd"></div>
+          <div class="field"><label for="orders">Ваш агент уже выполняет платные заказы?</label>
+            <select id="orders" name="orders">
+              <option value="" disabled selected>Выберите</option>
+              <option value="regular">Да, регулярно</option>
+              <option value="first">Да, были первые заказы</option>
+              <option value="negotiating">Пока нет — есть договорённости</option>
+              <option value="none">Пока нет — агент ещё строится</option>
+            </select></div>
+          <div class="field"><label for="rails">Как удобнее платить?</label>
+            <p class="field-hint">От ответов зависит, какие платёжные рельсы мы подключим первыми.</p>
+            <select id="rails" name="rails">
+              <option value="" disabled selected>Выберите</option>
+              <option value="card">Картой (Stripe)</option>
+              <option value="stablecoin">Стейблкоином (USDC)</option>
+              <option value="x402">Через x402 — агент платит сам</option>
+              <option value="any">Не важно</option>
+            </select></div>
+        </div>
+
+        <div class="mode-panel" data-mode="agent" hidden>
+          <p class="agent-intro">Скопируйте промпт и отдайте своему агенту. Он ответит в формате JSON — вставьте ответ ниже, остальное мы разберём сами.</p>
+          <div class="listing prompt-box">
+            <div class="ltop"><svg class="chair"><use href="#chair"/></svg>промпт для агента<button class="copy-btn" id="copyPrompt" type="button">Скопировать</button></div>
+<pre id="agentPrompt">Твой владелец хочет подключить тебя к eveningchairs — сервису, где AI-агент берёт платные ресурсы (датасеты, GPU, API) сейчас, а платит после того, как рассчитался заказчик.
+
+Ответь по своему реальному опыту работы. Если чего-то не знаешь — пиши "unknown", ничего не придумывай.
+
+Верни ТОЛЬКО JSON, без пояснений:
+{
+  "task": "одно предложение: какую работу ты выполняешь и для кого",
+  "needs": ["что тебе чаще всего требуется, одно или несколько: datasets | business_data | llm_api | search_scraping | speech_translation | gpu_inference | gpu_training | vms | other"],
+  "vendors": "какими платными сервисами пользуешься, через запятую",
+  "cost_usd": "средняя стоимость ресурсов на один заказ в долларах, числом (например 0.3 или 40), или unknown",
+  "orders": "выполняешь ли платные заказы: regular | first | negotiating | none | unknown",
+  "rails": "как тебе удобнее платить: card | stablecoin | x402 | any | unknown"
+}</pre>
+          </div>
+          <div class="field"><label for="agentAnswer">Ответ агента</label>
+            <textarea id="agentAnswer" name="agent_answer" data-kind="agent-json" rows="5" placeholder='{"task": "…", "needs": ["…"], …}'></textarea>
+            <p class="field-err" id="agentErr" hidden>Не получилось разобрать ответ. Проверьте, что вставили JSON целиком.</p></div>
+        </div>
+
+        <div class="field"><label for="contact">Email или Telegram</label>
+          <input type="text" id="contact" name="contact" data-kind="contact" placeholder="you@studio.dev или @username" autocomplete="email"></div>
+        <label class="check"><input type="checkbox" id="newsletter" name="newsletter"><span>Согласен получать рассылку о проекте — редко и по делу</span></label>
+        <button class="btn" id="submitBtn">Занять место</button>
+        <p class="form-fine">Контакт нужен, только чтобы ответить по заявке.<br>Оплату пока не принимаем, ресурсы не выдаём. Запуск 30 октября.</p>
+      </div>
+      <div id="successBody" class="success hidden">
+        <svg class="hero-mark"><use href="#chairmark"/></svg>
+        <h3>Вы в списке</h3>
+        <p>Ответим лично в течение суток — туда, куда вы оставили контакт.<br>Есть подтверждённый заказ? Вы первые в очереди.</p>
+        <p style="margin-top:14px;"><a href="https://t.me/+g5VipBrujTc2ZDIy" class="tg-link" target="_blank" rel="noopener">Следить за запуском в Telegram →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="brand"><svg class="chair"><use href="#chairmark"/></svg>eveningchairs</div>
+    <div class="tagline">
+      <span class="hook">Утром деньги — вечером стулья.</span><br>
+      Сейчас собираем лист ожидания и выстраиваем аналитику на основе анкет. Оплату пока не принимаем, ресурсы не выдаём.
+    </div>
+    <a href="https://t.me/+g5VipBrujTc2ZDIy" class="tg-link" target="_blank" rel="noopener">Telegram-канал →</a>
+  </div>
+  <div class="wrap foot-in" style="margin-top:8px;">© 2026 eveningchairs</div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Language routing (must run before PostHog):
+     ?lang=en (the "EN" switch on the Russian page) -> remember EN, stay here;
+     remembered choice (RU/EN switch) wins; otherwise browser language ru/kk or
+     region RU/KZ -> ru.html (UTMs kept); everyone else stays on EN.
+     The Russian page never redirects. -->
+<script>
+(function () {
+  try {
+    var q = new URLSearchParams(location.search);
+    if (q.get('lang') === 'en') { try { localStorage.setItem('ec_lang', 'en'); } catch (e) {} return; }
+    var saved = null; try { saved = localStorage.getItem('ec_lang'); } catch (e) {}
+    if (saved === 'en') return;
+    if (saved === 'ru') { location.replace('ru.html' + location.search + location.hash); return; }
+    var l = String((navigator.languages && navigator.languages[0]) || navigator.language || '').toLowerCase();
+    if (/^(ru|kk)(-|$)/.test(l) || /-(ru|kz)$/.test(l)) {
+      location.replace('ru.html' + location.search + location.hash);
+    }
+  } catch (e) {}
+})();
+</script>
+<title>eveningchairs — resources for AI agents, paid after your client pays</title>
+<meta name="description" content="Your AI agent gets paid datasets, GPUs and APIs now — and pays once the client has paid. Early access from October 30.">
+<link rel="canonical" href="https://eveningchairs.com/">
+<link rel="alternate" hreflang="ru" href="https://eveningchairs.com/ru">
+<link rel="alternate" hreflang="en" href="https://eveningchairs.com/">
+<link rel="alternate" hreflang="x-default" href="https://eveningchairs.com/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#F5F1E8">
+
+<!-- link preview for Telegram / social -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="eveningchairs">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://eveningchairs.com/">
+<meta property="og:title" content="eveningchairs — resources in the morning, payment in the evening">
+<meta property="og:description" content="Datasets, GPUs and APIs for AI agents — now. Payment — once the client has paid. Early access from October 30.">
+<meta property="og:image" content="https://eveningchairs.com/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="eveningchairs: resources in the morning, payment in the evening">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<!-- PostHog analytics loader — kept inline in <head> so the first pageview and
+     the session recording start before anything else. Project: eveningchairs, EU Cloud. -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_uZyYfuQu3dDAhx9pCHw47Nr4wKS73m9HCaJtDtob2j8m', {
+  api_host: 'https://eu.i.posthog.com',
+  person_profiles: 'identified_only',
+  capture_pageview: true,
+  capture_pageleave: true
+});
+</script>
+</head>
+<body>
+
+<svg class="svgdefs" aria-hidden="true"><defs>
+  <symbol id="chair" viewBox="0 0 48 64">
+    <path d="M14 31 C9 21 10 8 24 6 C38 8 39 21 34 31"/>
+    <path d="M17 15 C21 12 27 12 31 15"/>
+    <circle cx="24" cy="6" r="1.6" fill="currentColor" stroke="none"/>
+    <path d="M13 31 L35 31 L33 38 L15 38 Z"/>
+    <path d="M16 38 L14 60 M32 38 L34 60"/>
+    <path d="M15 55 L33 55"/>
+  </symbol>
+  <symbol id="chairmark" viewBox="0 0 48 64">
+    <path d="M14 31 C9 21 10 8 24 6 C38 8 39 21 34 31"/>
+    <path d="M13 31 L35 31 L33 38 L15 38 Z"/>
+    <path d="M16 38 L14 60 M32 38 L34 60"/>
+    <path d="M15 55 L33 55"/>
+    <circle cx="24" cy="23" r="7" fill="#A9542E" stroke="#F5F1E8" stroke-width="1.4"/>
+  </symbol>
+</defs></svg>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="brand"><svg class="chair"><use href="#chairmark"/></svg>eveningchairs</div>
+    <div class="nav-links">
+      <span class="lang-sw" role="group" aria-label="Language"><a href="ru.html" data-setlang="ru" hreflang="ru" lang="ru">RU</a><span class="on" aria-current="true">EN</span></span>
+      <a href="#how" class="hide-sm">How we solve it</a>
+      <a href="https://t.me/+g5VipBrujTc2ZDIy" class="tg-link hide-sm" target="_blank" rel="noopener">Telegram</a>
+      <a href="#waitlist" class="nav-cta">Early access</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="card"><div class="card-inner">
+      <div class="chairband" aria-hidden="true">
+        <svg class="chair"><use href="#chair"/></svg><svg class="chair"><use href="#chair"/></svg>
+        <svg class="chair"><use href="#chair"/></svg><svg class="chair"><use href="#chair"/></svg>
+        <svg class="chair"><use href="#chair"/></svg><svg class="chair"><use href="#chair"/></svg>
+        <svg class="chair"><use href="#chair"/></svg>
+      </div>
+      <p class="eyebrow">B2AI distributor for the agent economy</p>
+      <h1>Resources in the morning. Payment in the evening.</h1>
+      <p class="lede"><b>Your AI agent gets paid datasets, compute, GPUs and APIs now — and pays once the client has paid.</b> We help pick the right one, let the agent try it, and ship it on deferred terms.</p>
+      <div class="cta-row">
+        <button class="btn" id="heroCta">Grab a spot</button>
+        <span class="cta-note">Early access · opening <b>October 30</b></span>
+      </div>
+    </div></div>
+
+    <div class="timeline">
+      <div class="tl-track">
+        <div class="tl-node m">
+          <p class="cap">morning</p>
+          <h4>The agent needs a resource</h4>
+          <p>a dataset, compute, an API or GPUs — before it can start the job</p>
+        </div>
+        <div class="tl-rule"></div>
+        <div class="tl-node d">
+          <p class="cap">day</p>
+          <h4>We match and ship it</h4>
+          <p>the agent tries the resource and gets it on deferred terms</p>
+        </div>
+        <div class="tl-rule"></div>
+        <div class="tl-node e">
+          <p class="cap">evening</p>
+          <h4>The client pays you</h4>
+          <p>the resource is paid at settlement — the rest is yours</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="problem">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>The problem</p>
+    <h2>The job is already sold. The tools aren’t paid for.</h2>
+    <div class="problem-grid">
+      <div class="txt">
+        <p class="big">The client will pay — just later. But to take the job, the agent has to pay for resources up front: a paid dataset, someone else’s API, GPU time, virtual machines. That money isn’t there yet — the client pays on delivery.</p>
+        <p class="big">So every time, you face the same choice: freeze your own cash on every run, or turn the job down.</p>
+        <p class="big">On top of that, the agent can get it wrong and buy an unfamiliar resource blind — no test, no comparison — and waste the money.</p>
+      </div>
+
+      <div class="receipt">
+      <div class="stamp">3-day gap</div>
+      <div class="rhead"><span>Analytics report</span><svg class="chair"><use href="#chair"/></svg></div>
+      <div class="rrow"><span class="lbl">Job pays</span><span class="val pos">+ $20.00</span></div>
+      <div class="rrow"><span class="lbl">Needed now — database access</span><span class="val neg">− $6.00 today</span></div>
+      <div class="rrow"><span class="lbl">Client pays</span><span class="val" style="color:var(--ink-soft)">in 3 days</span></div>
+      <div class="rfoot">The gap isn’t money, it’s <b>time</b>: pay today, get paid in three days. eveningchairs ships the resource now and waits those three days with you.</div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="alt">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>How we solve it</p>
+    <h2>We ship the resource now. We get paid after your client pays.</h2>
+    <p class="big body-max">We’re a supplier: <b>we don’t hand out money — we ship resources</b>, and help the agent pick the one that fits the job.</p>
+
+    <div class="how-chairs" id="howStepper">
+      <div class="hc-track">
+        <button class="hc-node on" type="button" data-go="0"><span class="hc-seat"><svg class="chair"><use href="#chairmark"/></svg></span>Catalog</button>
+        <button class="hc-node" type="button" data-go="1"><span class="hc-seat"><svg class="chair"><use href="#chair"/></svg></span>Trial</button>
+        <button class="hc-node" type="button" data-go="2"><span class="hc-seat"><svg class="chair"><use href="#chair"/></svg></span>Deferral</button>
+        <button class="hc-node" type="button" data-go="3"><span class="hc-seat"><svg class="chair"><use href="#chair"/></svg></span>Settlement</button>
+      </div>
+
+      <div class="hc-stage">
+        <div class="hc-pane on">
+          <div class="hc-ill">
+            <svg class="ill" viewBox="0 0 240 170" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M24 124 H216"/>
+            <path class="s2" d="M44 124 V134 M196 124 V134"/>
+            <path class="fp" d="M50 70 V114 A22 7 0 0 0 94 114 V70"/>
+            <ellipse class="ft" cx="72" cy="70" rx="22" ry="7"/>
+            <path class="s2" d="M50 92 A22 7 0 0 0 94 92"/>
+            <path class="s2" d="M112 90 h-6 M112 100 h-6 M112 110 h-6 M150 90 h6 M150 100 h6 M150 110 h6"/>
+            <rect class="fp" x="112" y="80" width="38" height="40" rx="3"/>
+            <rect class="ft" x="122" y="90" width="18" height="20" rx="1"/>
+            <rect class="fp" x="166" y="92" width="40" height="28" rx="3"/>
+            <text class="tg" x="186" y="111" text-anchor="middle">{ }</text>
+            <circle class="ft" cx="160" cy="50" r="17"/>
+            <path d="M172 62 L186 76" stroke-width="3.5"/>
+            <path class="s2" d="M152 42 A10 10 0 0 1 164 38"/>
+            <text x="72" y="152" text-anchor="middle">data</text>
+            <text x="131" y="152" text-anchor="middle">GPU</text>
+            <text x="186" y="152" text-anchor="middle">API</text>
+            </svg>
+          </div>
+          <div class="hc-txt">
+            <div class="hc-num">1<span>/4</span></div>
+            <h3>The agent queries the catalog</h3>
+            <p>Via MCP or API, the agent finds what fits its job — with prices, limits and formats.</p>
+            <p class="hc-ex">“need a court-records database, under $10”</p>
+            <div class="hc-actions">
+              <button class="btn" type="button" data-go="next">Next →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hc-pane">
+          <div class="hc-ill">
+            <svg class="ill" viewBox="0 0 240 170" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <g transform="translate(-14 0)">
+            <path class="fp" stroke="none" d="M108 34 V64 L78 128 Q75 136 84 136 H156 Q165 136 162 128 L132 64 V34 Z"/>
+            <path class="ft" stroke="none" d="M89 104 H151 L160 127 Q162 132 156 132 H84 Q78 132 80 127 Z"/>
+            <path class="s2" d="M89 104 H151"/>
+            <path d="M108 34 V64 L78 128 Q75 136 84 136 H156 Q165 136 162 128 L132 64 V34"/>
+            <path d="M101 34 H139"/>
+            <circle class="s2" cx="113" cy="92" r="3"/>
+            <circle class="s2" cx="126" cy="80" r="2.5"/>
+            <circle class="s2" cx="118" cy="69" r="2"/>
+            <circle class="fg" stroke="none" cx="178" cy="58" r="17"/>
+            <path class="sp" d="M170 58 L176 64 L187 52" stroke-width="3"/>
+            <text x="178" y="96" text-anchor="middle">trial</text>
+            </g>
+            </svg>
+          </div>
+          <div class="hc-txt">
+            <div class="hc-num">2<span>/4</span></div>
+            <h3>Tests before buying</h3>
+            <p>Trial access to make sure the resource fits the job — before paying for it.</p>
+            <p class="hc-ex">20 trial queries: is the coverage enough?</p>
+            <div class="hc-actions">
+              <button class="btn" type="button" data-go="next">Next →</button>
+              <button class="how-back" type="button" data-go="back">← Back</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hc-pane">
+          <div class="hc-ill">
+            <svg class="ill" viewBox="0 0 240 170" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path class="fp" d="M40 30 H94 L112 48 V128 H40 Z"/>
+            <path d="M94 30 V48 H112"/>
+            <path class="s2" d="M52 62 H100 M52 74 H100 M52 86 H84"/>
+            <circle class="sb" cx="90" cy="108" r="12"/>
+            <path class="sb" d="M84 108 L88 112 L96 103"/>
+            <path class="s2 dash" d="M122 86 H150"/>
+            <path class="s2" d="M144 80 L151 86 L144 92"/>
+            <path class="ft" d="M160 76 L172 62 H222 L210 76 Z"/>
+            <path class="fp" d="M210 76 L222 62 V112 L210 126 Z"/>
+            <rect class="fp" x="160" y="76" width="50" height="50"/>
+            <path class="s2" d="M179 76 V92 H191 V76"/>
+            <circle class="fp" cx="214" cy="34" r="13"/>
+            <path d="M214 27 V34 L219 38"/>
+            <text x="76" y="152" text-anchor="middle">job</text>
+            <text x="191" y="152" text-anchor="middle">resource</text>
+            </svg>
+          </div>
+          <div class="hc-txt">
+            <div class="hc-num">3<span>/4</span></div>
+            <h3>Shows the job — gets the resource on deferred terms</h3>
+            <p>An advance-paid or confirmed job — and we ship the resource right away. The agent owner puts down a small deposit, not the full price.</p>
+            <p class="hc-ex">$20 job → $6 access today, $1 deposit</p>
+            <div class="hc-actions">
+              <button class="btn" type="button" data-go="next">Next →</button>
+              <button class="how-back" type="button" data-go="back">← Back</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hc-pane">
+          <div class="hc-ill">
+            <svg class="ill" viewBox="0 0 240 170" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <text class="tn" x="120" y="30" text-anchor="middle">eveningchairs</text>
+            <!-- pipe: client → us → agent owner -->
+            <rect class="ft" x="46" y="63" width="146" height="14"/>
+            <path d="M46 57 V83 M192 57 V83"/>
+            <path class="s2" d="M82 66 l5 4 l-5 4 M156 66 l5 4 l-5 4"/>
+            <rect class="ft" x="113" y="88" width="14" height="20"/>
+            <path class="s2" d="M116 94 l4 5 l4 -5"/>
+            <!-- the client’s payment travels down the pipe -->
+            <circle class="fb" cx="64" cy="70" r="8"/>
+            <text class="tp" x="64" y="74" text-anchor="middle" style="font-size:11px">$</text>
+            <circle class="fb" cx="176" cy="70" r="8"/>
+            <text class="tp" x="176" y="74" text-anchor="middle" style="font-size:11px">$</text>
+            <!-- us -->
+            <circle class="fp" cx="120" cy="70" r="22"/>
+            <use href="#chairmark" x="108" y="53" width="24" height="32" stroke-width="2.6"/>
+            <!-- our share -->
+            <circle class="fb" cx="120" cy="120" r="9"/>
+            <text class="tp" x="120" y="124.5" text-anchor="middle" style="font-size:11px">$</text>
+            <!-- client: a person or an agent -->
+            <circle class="fp" cx="26" cy="70" r="16"/>
+            <circle cx="26" cy="64" r="4.5"/>
+            <path d="M17 81 Q18 71 26 71 Q34 71 35 81"/>
+            <!-- agent owner’s wallet -->
+            <rect class="fp" x="198" y="58" width="36" height="26" rx="3"/>
+            <path class="s2" d="M202 58 V54 H226 V58"/>
+            <rect class="ft" x="220" y="65" width="14" height="12" rx="2"/>
+            <circle class="fg" stroke="none" cx="226" cy="71" r="2"/>
+            <text x="26" y="106" text-anchor="middle">client</text>
+            <text x="216" y="106" text-anchor="middle">you</text>
+            <text x="120" y="148" text-anchor="middle">us: cost covered</text>
+            <text x="120" y="161" text-anchor="middle">+ fee</text>
+            </svg>
+          </div>
+          <div class="hc-txt">
+            <div class="hc-num">4<span>/4</span></div>
+            <h3>The client pays — we settle</h3>
+            <p>The client’s payment flows through us: at settlement we take the resource cost and our fee, and the rest goes straight to the agent owner. No invoices, no reminders.</p>
+            <p class="hc-ex">client pays $20 → $6 + fee to us, the rest to you</p>
+            <div class="hc-actions">
+              <button class="btn" type="button" data-go="waitlist">Grab a spot →</button>
+              <button class="how-back" type="button" data-go="back">← Back</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="layer">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Integration layer</p>
+    <h2>One MCP instead of a dozen integrations.</h2>
+    <p class="big body-max">The agent doesn’t call every cloud’s API — it calls our MCP. The rest is on us: we know the products in our portfolio, maintain the vendor integrations and return results to the agent in one format.</p>
+
+    <div class="layer-ill">
+      <svg class="ill ill-wide" viewBox="0 0 720 230" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect class="fp" x="20" y="80" width="130" height="70" rx="3"/>
+        <text class="tv" x="85" y="112" text-anchor="middle">AI agent</text>
+        <text x="85" y="132" text-anchor="middle">tools/call</text>
+        <path d="M150 115 H262"/>
+        <path class="s2" d="M186 110 l5 5 l-5 5 M198 110 l5 5 l-5 5 M210 110 l5 5 l-5 5"/>
+        <text x="204" y="98" text-anchor="middle">one MCP</text>
+        <path class="s2" d="M338 115 C420 115 420 30 500 30 M338 115 C420 115 420 72 500 72 M338 115 H500 M338 115 C420 115 420 156 500 156 M338 115 C420 115 420 198 500 198"/>
+        <text x="419" y="16" text-anchor="middle">our integrations</text>
+        <circle class="fp" cx="300" cy="115" r="38" stroke-width="2.5"/>
+        <use href="#chairmark" x="283" y="92" width="34" height="45" stroke-width="2.6"/>
+        <text class="tn" x="300" y="176" text-anchor="middle">eveningchairs</text>
+        <text x="300" y="192" text-anchor="middle">MCP server</text>
+        <rect class="fp" x="500" y="14" width="200" height="32" rx="3"/><text class="tv" x="516" y="35">GPU clouds</text>
+        <rect class="fp" x="500" y="56" width="200" height="32" rx="3"/><text class="tv" x="516" y="77">Datasets</text>
+        <rect class="fp" x="500" y="98" width="200" height="32" rx="3"/><text class="tv" x="516" y="119">LLM API</text>
+        <rect class="fp" x="500" y="140" width="200" height="32" rx="3"/><text class="tv" x="516" y="161">Search &amp; scraping</text>
+        <rect class="fp" x="500" y="182" width="200" height="32" rx="3"/><text class="tv" x="516" y="203">Speech &amp; translation</text>
+      </svg>
+      <svg class="ill ill-tall" viewBox="0 0 320 450" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect class="fp" x="95" y="10" width="130" height="58" rx="3"/>
+        <text class="tv" x="160" y="36" text-anchor="middle">AI agent</text>
+        <text x="160" y="55" text-anchor="middle">tools/call</text>
+        <path d="M160 68 V122"/>
+        <path class="s2" d="M155 84 l5 5 l5 -5 M155 96 l5 5 l5 -5"/>
+        <text x="174" y="99">one MCP</text>
+        <path class="s2" d="M160 236 V250 H40 V424 M40 280 H60 M40 316 H60 M40 352 H60 M40 388 H60 M40 424 H60"/>
+        <text x="172" y="254">our integrations</text>
+        <circle class="fp" cx="160" cy="160" r="38" stroke-width="2.5"/>
+        <use href="#chairmark" x="143" y="137" width="34" height="45" stroke-width="2.6"/>
+        <text class="tn" x="160" y="216" text-anchor="middle">eveningchairs</text>
+        <text x="160" y="231" text-anchor="middle">MCP server</text>
+        <rect class="fp" x="60" y="266" width="220" height="28" rx="3"/><text class="tv" x="76" y="285">GPU clouds</text>
+        <rect class="fp" x="60" y="302" width="220" height="28" rx="3"/><text class="tv" x="76" y="321">Datasets</text>
+        <rect class="fp" x="60" y="338" width="220" height="28" rx="3"/><text class="tv" x="76" y="357">LLM API</text>
+        <rect class="fp" x="60" y="374" width="220" height="28" rx="3"/><text class="tv" x="76" y="393">Search &amp; scraping</text>
+        <rect class="fp" x="60" y="410" width="220" height="28" rx="3"/><text class="tv" x="76" y="429">Speech &amp; translation</text>
+      </svg>
+      <svg class="ill ill-mob" viewBox="0 0 340 226" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect class="fp" x="8" y="20" width="112" height="50" rx="3"/>
+        <text class="tv" x="64" y="42" text-anchor="middle">AI agent</text>
+        <text x="64" y="59" text-anchor="middle">tools/call</text>
+        <path d="M120 45 H173"/>
+        <path class="s2" d="M136 40 l5 5 l-5 5 M147 40 l5 5 l-5 5"/>
+        <text x="146" y="31" text-anchor="middle">one MCP</text>
+        <circle class="fp" cx="205" cy="45" r="31" stroke-width="2.5"/>
+        <use href="#chairmark" x="191" y="27" width="28" height="37" stroke-width="2.6"/>
+        <text class="tn" x="243" y="41">eveningchairs</text>
+        <text x="243" y="56">MCP server</text>
+        <path class="s2" d="M205 76 V110 M90 110 H255 M90 110 V124 M255 110 V124"/>
+        <text x="8" y="104">our integrations</text>
+        <rect class="fp" x="8" y="124" width="164" height="27" rx="3"/><text class="tv" x="20" y="142">GPU clouds</text>
+        <rect class="fp" x="8" y="158" width="164" height="27" rx="3"/><text class="tv" x="20" y="176">Datasets</text>
+        <rect class="fp" x="8" y="192" width="164" height="27" rx="3"/><text class="tv" x="20" y="210">LLM API</text>
+        <rect class="fp" x="178" y="124" width="156" height="27" rx="3"/><text class="tv" x="190" y="142">Search &amp; scraping</text>
+        <rect class="fp" x="178" y="158" width="156" height="27" rx="3"/><text class="tv" x="190" y="176">Speech &amp; translation</text>
+      </svg>
+    </div>
+
+    <div class="layer-grid">
+      <div>
+        <ol class="layer-points">
+          <li><span class="lp-n">1</span><div><b>One entry point, one bill</b><span>One MCP server and one key instead of signing up with every vendor. One response schema, one spending history.</span></div></li>
+          <li><span class="lp-n">2</span><div><b>We know our portfolio</b><span>Prices, limits, formats and gotchas of every vendor. We tell the agent what to use for the job and let it try first. Where we have partner terms with a vendor, the agent sees them right in the response.</span></div></li>
+          <li><span class="lp-n">3</span><div><b>Deferral is built into the call</b><span>The resource goes through us, so deferral works right inside the call — no separate payments to the vendor. The limit grows with the history of calls and settlements.</span></div></li>
+        </ol>
+        <div class="chips"><span class="chip">MCP</span><span class="chip">REST API</span><span class="chip">x402</span><span class="chip">Stripe</span><span class="chip">USDC</span></div>
+      </div>
+      <div class="listing" role="img" aria-label="Example: an agent calls eveningchairs MCP tools">
+        <div class="ltop"><svg class="chair"><use href="#chair"/></svg>agent → eveningchairs MCP</div>
+<pre><span class="c"># the agent looks for a resource for the job</span>
+tools/call <span class="k">catalog.search</span>
+{ <span class="k">"task"</span>: <span class="s">"research"</span>, <span class="k">"budget"</span>: <span class="n">10</span> }
+
+<span class="c"># tries it, then takes it on deferred terms</span>
+tools/call <span class="k">orders.create</span>
+{
+  <span class="k">"sku"</span>:         <span class="s">"data.api/premium"</span>,
+  <span class="k">"trial_first"</span>: <span class="n">true</span>,
+  <span class="k">"order_proof"</span>: <span class="s">"ord_9f2…"</span>,
+  <span class="k">"job_amount"</span>:  <span class="n">20.00</span>,
+  <span class="k">"price"</span>:       <span class="n">6.00</span>,
+  <span class="k">"deposit"</span>:     <span class="n">1.00</span>
+}
+
+<span class="c"># response: access already flows through us</span>
+{ <span class="k">"approved"</span>: <span class="n">true</span>,
+  <span class="k">"endpoint"</span>: <span class="s">"mcp://eveningchairs/data.api"</span>,
+  <span class="k">"pay_on"</span>: <span class="s">"customer_payment"</span> }</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="growth" class="alt">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Why deferral pays off</p>
+    <h2>Deferral costs money. Turning jobs down costs more.</h2>
+    <p class="big body-max">Bankers have known it forever: businesses with working capital grow faster. Same with agents — either it takes only the jobs its own cash can cover, or it <b>pays a little for deferral and takes them all</b>.</p>
+
+    <div class="growth-grid">
+      <div class="receipt">
+        <div class="stamp">7 jobs lost</div>
+        <div class="rhead"><span>Without deferral</span></div>
+        <div class="rrow"><span class="lbl">Jobs in over 3 days</span><span class="val">12</span></div>
+        <div class="rrow"><span class="lbl">Own cash for resources</span><span class="val">$30.00</span></div>
+        <div class="rrow"><span class="lbl">Enough for</span><span class="val">5 jobs</span></div>
+        <div class="rrow total"><span class="lbl">Earned in those 3 days</span><span class="val pos">+ $70.00</span></div>
+        <div class="rfoot">5 × ($20 − $6). Your cash only comes back in 3 days, when clients pay — the other <b>7 jobs went to competitors</b>.</div>
+      </div>
+      <div class="receipt win">
+        <div class="stamp ok">× 2.2 earnings</div>
+        <div class="rhead"><span>With eveningchairs deferral</span></div>
+        <div class="rrow"><span class="lbl">Jobs in over 3 days</span><span class="val">12</span></div>
+        <div class="rrow"><span class="lbl">Own cash for deposits</span><span class="val">$12.00</span></div>
+        <div class="rrow"><span class="lbl">Deferral fee</span><span class="val neg">− $12.00</span></div>
+        <div class="rrow total"><span class="lbl">Earned in those 3 days</span><span class="val pos">+ $156.00</span></div>
+        <div class="rfoot">12 × ($20 − $6 − $1). Less of your own cash is frozen, and <b>earnings are 2.2× higher</b>.</div>
+      </div>
+    </div>
+    <p class="case-fine">Example numbers: $20 job, $6 resource, client pays in 3 days, $1 deposit and $1 fee per job.</p>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Use cases</p>
+    <div class="cases-head">
+      <h2>Five jobs an agent can take on with us</h2>
+      <div class="case-nav">
+        <button class="case-btn" data-dir="-1" aria-label="Previous case">←</button>
+        <span class="case-count"><b id="caseNow">1</b> / 5</span>
+        <button class="case-btn" data-dir="1" aria-label="Next case">→</button>
+      </div>
+    </div>
+
+    <div class="case-track" id="caseTrack" tabindex="0" aria-label="Use cases: scroll sideways">
+      <article class="receipt case" data-case="due-diligence">
+        <div class="stamp">7-day gap</div>
+        <div class="rhead"><span>Due diligence for a fund</span></div>
+        <div class="case-meta"><span class="chip">paid API</span><span>An analyst agent vets three companies ahead of a VC fund’s deal.</span></div>
+        <div class="rrow"><span class="lbl">Job</span><span class="val pos">+ $400.00</span></div>
+        <div class="rrow"><span class="lbl">Needed up front — company &amp; court records database</span><span class="val neg">− $90.00</span></div>
+        <div class="rrow"><span class="lbl">Owner’s deposit</span><span class="val">$10.00</span></div>
+        <div class="rrow"><span class="lbl">Fund pays</span><span class="val" style="color:var(--ink-soft)">in 7 days</span></div>
+        <div class="rfoot">The agent gets database access from us today and delivers the report. <b>When the fund pays</b>, we deduct the cost of access — the rest is yours.</div>
+      </article>
+      <article class="receipt case" data-case="llm-tokens">
+        <div class="stamp">10-day gap</div>
+        <div class="rhead"><span>Legacy code migration</span></div>
+        <div class="case-meta"><span class="chip">LLM API · tokens</span><span>An agent ports 120,000 lines of legacy code to a new stack for a fintech company.</span></div>
+        <div class="rrow"><span class="lbl">Job</span><span class="val pos">+ $2,000.00</span></div>
+        <div class="rrow"><span class="lbl">Needed up front — LLM tokens for the whole migration</span><span class="val neg">− $450.00</span></div>
+        <div class="rrow"><span class="lbl">Owner’s deposit</span><span class="val">$45.00</span></div>
+        <div class="rrow"><span class="lbl">Client pays after acceptance tests</span><span class="val" style="color:var(--ink-soft)">in 10 days</span></div>
+        <div class="rfoot">The agent gets tokens for the whole job through us right away — <b>no topping up the provider balance out of pocket</b>. Settlement when the client accepts the tests.</div>
+      </article>
+
+      <article class="receipt case" data-case="render">
+        <div class="stamp">5-day gap</div>
+        <div class="rhead"><span>Catalog rendering</span></div>
+        <div class="case-meta"><span class="chip">GPU</span><span>An agent makes 3D renders of 300 products for an online store.</span></div>
+        <div class="rrow"><span class="lbl">Job</span><span class="val pos">+ $600.00</span></div>
+        <div class="rrow"><span class="lbl">Needed up front — GPU hours for rendering</span><span class="val neg">− $140.00</span></div>
+        <div class="rrow"><span class="lbl">Owner’s deposit</span><span class="val">$15.00</span></div>
+        <div class="rrow"><span class="lbl">Store pays on acceptance</span><span class="val" style="color:var(--ink-soft)">in 5 days</span></div>
+        <div class="rfoot">We ship the compute right away — rendering starts the same day. <b>Settlement when the store accepts the product cards.</b></div>
+      </article>
+
+      <article class="receipt case" data-case="fine-tune">
+        <div class="stamp">14-day gap</div>
+        <div class="rhead"><span>Brand-tuned model</span></div>
+        <div class="case-meta"><span class="chip">GPU · fine-tune</span><span>An agent fine-tunes an image generator on the client’s brand style.</span></div>
+        <div class="rrow"><span class="lbl">Job</span><span class="val pos">+ $1,200.00</span></div>
+        <div class="rrow"><span class="lbl">Needed up front — GPUs for fine-tuning</span><span class="val neg">− $260.00</span></div>
+        <div class="rrow"><span class="lbl">Owner’s deposit</span><span class="val">$30.00</span></div>
+        <div class="rrow"><span class="lbl">Client pays on sign-off</span><span class="val" style="color:var(--ink-soft)">in 14 days</span></div>
+        <div class="rfoot">The longest gap — two weeks to sign-off. Without deferral, the owner would <b>freeze $260 of their own</b> for all that time.</div>
+      </article>
+
+      <article class="receipt case" data-case="market-research">
+        <div class="stamp">3-day gap</div>
+        <div class="rhead"><span>Market overview</span></div>
+        <div class="case-meta"><span class="chip">dataset</span><span>An agent builds a market overview for a startup’s pitch deck.</span></div>
+        <div class="rrow"><span class="lbl">Job</span><span class="val pos">+ $350.00</span></div>
+        <div class="rrow"><span class="lbl">Needed up front — industry data license</span><span class="val neg">− $120.00</span></div>
+        <div class="rrow"><span class="lbl">Owner’s deposit</span><span class="val">$15.00</span></div>
+        <div class="rrow"><span class="lbl">Client pays on delivery</span><span class="val" style="color:var(--ink-soft)">in 3 days</span></div>
+        <div class="rfoot">The agent <b>tries a data sample first</b> and buys the license only if it fits the job.</div>
+      </article>
+
+    </div>
+    <p class="case-fine">Limit, deposit and client advance depend on the agent’s history and the scoring of the specific job.</p>
+  </div>
+</section>
+
+<section id="who" class="alt">
+  <div class="wrap">
+    <p class="kicker"><svg class="chair"><use href="#chair"/></svg>Who it’s for</p>
+    <h2>For agents with a real job.</h2>
+    <p class="big body-max">We ship resources against <b>an already-sold result</b> — not a bet that something might work out. If payment on the other end is visible and confirmed, you’re in the right place.</p>
+    <div class="who who-wide">
+      <div class="col yes"><h4>A fit if</h4><ul class="who-proof">
+        <li><b>The agent has an advance-paid or confirmed job — and can prove it</b><span>a contract, platform escrow, a smart contract, the client’s invoice</span></li>
+        <li><b>The task is clear: deliver it, get paid</b><span>the agent can describe it to our scoring and compliance module: what it delivers and how the client accepts the work</span></li>
+        <li><b>It needs specific resources before starting</b><span>the agent knows which dataset, API or GPU it needs and what it costs</span></li>
+        <li><b>There’s an owner behind the agent — a person or a company</b><span>they pass identity verification and are accountable for the agent’s actions</span></li>
+      </ul></div>
+      <div class="col no"><h4>Not a fit if</h4><ul>
+        <li>the agent will “try and maybe earn something”</li>
+        <li>the money is for trading or speculation</li>
+        <li>there’s no job yet — just an idea</li>
+        <li>the agent is buying an experience, not a work resource</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="waitlist">
+  <div class="wrap">
+    <p class="kicker" style="justify-content:center"><svg class="chair"><use href="#chair"/></svg>Early access</p>
+    <h2 style="text-align:center; margin-left:auto; margin-right:auto;">Grab a spot before launch</h2>
+    <p class="big" style="text-align:center; max-width:50ch; margin:0 auto;">The first window is small — priority goes to agent owners with confirmed jobs.</p>
+
+    <div class="form-card">
+      <div class="mode-tabs" role="tablist" aria-label="How to fill in the form">
+        <button class="mode-tab on" type="button" role="tab" aria-selected="true" data-mode="manual">I’ll fill it in</button>
+        <button class="mode-tab" type="button" role="tab" aria-selected="false" data-mode="agent">Ask my agent</button>
+      </div>
+      <div id="formBody">
+        <input type="text" id="company_site" name="company_site" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="mode-panel" data-mode="manual">
+          <fieldset class="field picks-field" data-required>
+            <legend>What does your agent need most often? <span class="opt">pick any</span></legend>
+            <div class="picks">
+              <label><input type="checkbox" name="needs" value="datasets"><span>Paid datasets</span></label>
+              <label><input type="checkbox" name="needs" value="business_data"><span>Company &amp; court data</span></label>
+              <label><input type="checkbox" name="needs" value="llm_api"><span>LLM API</span></label>
+              <label><input type="checkbox" name="needs" value="search_scraping"><span>Search &amp; scraping</span></label>
+              <label><input type="checkbox" name="needs" value="speech_translation"><span>Speech &amp; translation</span></label>
+              <label><input type="checkbox" name="needs" value="gpu_inference"><span>GPU: inference, rendering</span></label>
+              <label><input type="checkbox" name="needs" value="gpu_training"><span>GPU: training, fine-tuning</span></label>
+              <label><input type="checkbox" name="needs" value="vms"><span>Virtual machines</span></label>
+              <label><input type="checkbox" name="needs" value="other"><span>Other</span></label>
+            </div>
+          </fieldset>
+          <div class="field"><label for="vendors">Which paid services does the agent already use? <span class="opt">optional</span></label>
+            <input type="text" id="vendors" name="vendors" placeholder="e.g. RunPod, SerpAPI, OpenAI"></div>
+          <div class="field range-field"><label for="costRange">Average cost of the resources your agent needs to complete a job</label>
+            <p class="range-val empty" id="costVal">move the slider</p>
+            <input type="range" class="cost-range" id="costRange" name="cost_pos" data-kind="range-required" min="0" max="12" step="1" value="6"
+              data-values="0.1,0.25,0.5,1,2,5,10,25,50,100,250,500,1000" aria-describedby="costVal">
+            <div class="range-ticks" aria-hidden="true"><span style="left:0">$0.10</span><span style="left:25%">$1</span><span style="left:50%">$10</span><span style="left:75%">$100</span><span style="left:100%">$1000+</span></div>
+            <input type="hidden" id="cost" name="cost"><input type="hidden" id="costUsd" name="cost_usd"></div>
+          <div class="field"><label for="orders">Does your agent already do paid jobs?</label>
+            <select id="orders" name="orders">
+              <option value="" disabled selected>Choose</option>
+              <option value="regular">Yes, regularly</option>
+              <option value="first">Yes, a first few</option>
+              <option value="negotiating">Not yet — deals in the works</option>
+              <option value="none">Not yet — the agent is still being built</option>
+            </select></div>
+          <div class="field"><label for="rails">How would you prefer to pay?</label>
+            <p class="field-hint">Your answers decide which payment rails we connect first.</p>
+            <select id="rails" name="rails">
+              <option value="" disabled selected>Choose</option>
+              <option value="card">Card (Stripe)</option>
+              <option value="stablecoin">Stablecoin (USDC)</option>
+              <option value="x402">Via x402 — the agent pays itself</option>
+              <option value="any">Doesn’t matter</option>
+            </select></div>
+        </div>
+
+        <div class="mode-panel" data-mode="agent" hidden>
+          <p class="agent-intro">Copy the prompt and hand it to your agent. It will answer in JSON — paste the reply below and we’ll handle the rest.</p>
+          <div class="listing prompt-box">
+            <div class="ltop"><svg class="chair"><use href="#chair"/></svg>prompt for your agent<button class="copy-btn" id="copyPrompt" type="button">Copy</button></div>
+<pre id="agentPrompt">Your owner wants to connect you to eveningchairs — a service where an AI agent gets paid resources (datasets, GPUs, APIs) now and pays after its client has paid.
+
+Answer from your actual work experience. If you don’t know something, write "unknown" — don’t make anything up.
+
+Return ONLY JSON, no commentary:
+{
+  "task": "one sentence: what work you do and for whom",
+  "needs": ["what you need most often, one or more: datasets | business_data | llm_api | search_scraping | speech_translation | gpu_inference | gpu_training | vms | other"],
+  "vendors": "which paid services you use, comma-separated",
+  "cost_usd": "average cost of resources per job in USD, as a number (e.g. 0.3 or 40), or unknown",
+  "orders": "do you already do paid jobs: regular | first | negotiating | none | unknown",
+  "rails": "how you prefer to pay: card | stablecoin | x402 | any | unknown"
+}</pre>
+          </div>
+          <div class="field"><label for="agentAnswer">Agent’s reply</label>
+            <textarea id="agentAnswer" name="agent_answer" data-kind="agent-json" rows="5" placeholder='{"task": "…", "needs": ["…"], …}'></textarea>
+            <p class="field-err" id="agentErr" hidden>Couldn’t parse the reply. Make sure you pasted the whole JSON.</p></div>
+        </div>
+
+        <div class="field"><label for="contact">Email or Telegram</label>
+          <input type="text" id="contact" name="contact" data-kind="contact" placeholder="you@studio.dev or @username" autocomplete="email"></div>
+        <label class="check"><input type="checkbox" id="newsletter" name="newsletter"><span>Send me project updates — rarely, and only when it matters</span></label>
+        <button class="btn" id="submitBtn">Grab a spot</button>
+        <p class="form-fine">We only need your contact to reply to your request.<br>We don’t take payments or ship resources yet. Launching October 30.</p>
+      </div>
+      <div id="successBody" class="success hidden">
+        <svg class="hero-mark"><use href="#chairmark"/></svg>
+        <h3>You’re on the list</h3>
+        <p>We’ll reply personally within 24 hours — wherever you left your contact.<br>Have a confirmed job? You’re first in line.</p>
+        <p style="margin-top:14px;"><a href="https://t.me/+g5VipBrujTc2ZDIy" class="tg-link" target="_blank" rel="noopener">Follow the launch on Telegram →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="brand"><svg class="chair"><use href="#chairmark"/></svg>eveningchairs</div>
+    <div class="tagline">
+      <span class="hook">Morning money, evening chairs.</span><br>
+      Right now we’re building the waitlist and learning from the survey answers. We don’t take payments or ship resources yet.
+    </div>
+    <a href="https://t.me/+g5VipBrujTc2ZDIy" class="tg-link" target="_blank" rel="noopener">Telegram channel →</a>
+  </div>
+  <div class="wrap foot-in" style="margin-top:8px;">© 2026 eveningchairs</div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
