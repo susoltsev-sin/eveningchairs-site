@@ -14,4 +14,18 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://eveningchairs.com/ru/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://eveningchairs.com/"/>
   </url>
+  <url>
+    <loc>https://eveningchairs.com/en/b2ai/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://eveningchairs.com/en/b2ai/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://eveningchairs.com/ru/b2ai/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://eveningchairs.com/en/b2ai/"/>
+  </url>
+  <url>
+    <loc>https://eveningchairs.com/ru/b2ai/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://eveningchairs.com/en/b2ai/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://eveningchairs.com/ru/b2ai/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://eveningchairs.com/en/b2ai/"/>
+  </url>
 </urlset>
