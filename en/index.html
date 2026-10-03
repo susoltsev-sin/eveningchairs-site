@@ -532,7 +532,7 @@ tools/call <span class="k">orders.create</span>
   <div class="wrap">
     <p class="kicker" style="justify-content:center"><svg class="chair"><use href="#chair"/></svg>Early access</p>
     <h2 style="text-align:center; margin-left:auto; margin-right:auto;">Grab a spot before launch</h2>
-    <p class="big" style="text-align:center; max-width:50ch; margin:0 auto;">The first window is small — priority goes to agent owners with confirmed jobs.</p>
+    <p class="big" style="text-align:center; max-width:50ch; margin:0 auto;">Only your contact is required. The rest moves you up the line — agent owners with confirmed jobs go first.</p>
 
     <div class="form-card">
       <div class="mode-tabs" role="tablist" aria-label="How to fill in the form">
@@ -543,8 +543,8 @@ tools/call <span class="k">orders.create</span>
         <input type="text" id="company_site" name="company_site" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 
         <div class="mode-panel" data-mode="manual">
-          <fieldset class="field picks-field" data-required>
-            <legend>What does your agent need most often? <span class="opt">pick any</span></legend>
+          <fieldset class="field picks-field">
+            <legend>What does your agent need most often? <span class="opt">optional, pick any</span></legend>
             <div class="picks">
               <label><input type="checkbox" name="needs" value="datasets"><span>Paid datasets</span></label>
               <label><input type="checkbox" name="needs" value="business_data"><span>Company &amp; court data</span></label>
@@ -559,13 +559,13 @@ tools/call <span class="k">orders.create</span>
           </fieldset>
           <div class="field"><label for="vendors">Which paid services does the agent already use? <span class="opt">optional</span></label>
             <input type="text" id="vendors" name="vendors" placeholder="e.g. RunPod, SerpAPI, OpenAI"></div>
-          <div class="field range-field"><label for="costRange">Average cost of the resources your agent needs to complete a job</label>
+          <div class="field range-field"><label for="costRange">Average cost of the resources your agent needs to complete a job <span class="opt">optional</span></label>
             <p class="range-val empty" id="costVal">move the slider</p>
             <input type="range" class="cost-range" id="costRange" name="cost_pos" data-kind="range-required" min="0" max="12" step="1" value="6"
               data-values="0.1,0.25,0.5,1,2,5,10,25,50,100,250,500,1000" aria-describedby="costVal">
             <div class="range-ticks" aria-hidden="true"><span style="left:0">$0.10</span><span style="left:25%">$1</span><span style="left:50%">$10</span><span style="left:75%">$100</span><span style="left:100%">$1000+</span></div>
             <input type="hidden" id="cost" name="cost"><input type="hidden" id="costUsd" name="cost_usd"></div>
-          <div class="field"><label for="orders">Does your agent already do paid jobs?</label>
+          <div class="field"><label for="orders">Does your agent already do paid jobs? <span class="opt">optional</span></label>
             <select id="orders" name="orders">
               <option value="" disabled selected>Choose</option>
               <option value="regular">Yes, regularly</option>
@@ -573,7 +573,7 @@ tools/call <span class="k">orders.create</span>
               <option value="negotiating">Not yet — deals in the works</option>
               <option value="none">Not yet — the agent is still being built</option>
             </select></div>
-          <div class="field"><label for="rails">How would you prefer to pay?</label>
+          <div class="field"><label for="rails">How would you prefer to pay? <span class="opt">optional</span></label>
             <p class="field-hint">Your answers decide which payment rails we connect first.</p>
             <select id="rails" name="rails">
               <option value="" disabled selected>Choose</option>
@@ -632,7 +632,7 @@ Return ONLY JSON, no commentary:
     </div>
     <a href="https://t.me/+g5VipBrujTc2ZDIy" class="tg-link" target="_blank" rel="noopener">Telegram channel →</a>
   </div>
-  <div class="wrap foot-in" style="margin-top:8px;"><span>© 2026 eveningchairs</span><a href="/en/b2ai/" class="tg-link">What is a B2AI distributor? →</a></div>
+  <div class="wrap foot-in" style="margin-top:8px;"><span>© 2026 eveningchairs Ltd</span><a href="/en/b2ai/" class="tg-link">What is a B2AI distributor? →</a></div>
 </footer>
 
 <script src="/script.js"></script>

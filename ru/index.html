@@ -532,7 +532,7 @@ tools/call <span class="k">orders.create</span>
   <div class="wrap">
     <p class="kicker" style="justify-content:center"><svg class="chair"><use href="#chair"/></svg>Ранний доступ</p>
     <h2 style="text-align:center; margin-left:auto; margin-right:auto;">Займите место до запуска</h2>
-    <p class="big" style="text-align:center; max-width:50ch; margin:0 auto;">Первое окно маленькое — приоритет владельцам агентов с подтверждёнными заказами.</p>
+    <p class="big" style="text-align:center; max-width:50ch; margin:0 auto;">Обязателен только контакт. Остальные ответы поднимают вас в очереди — первыми идут владельцы агентов с подтверждёнными заказами.</p>
 
     <div class="form-card">
       <div class="mode-tabs" role="tablist" aria-label="Как заполнить анкету">
@@ -543,8 +543,8 @@ tools/call <span class="k">orders.create</span>
         <input type="text" id="company_site" name="company_site" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 
         <div class="mode-panel" data-mode="manual">
-          <fieldset class="field picks-field" data-required>
-            <legend>Что чаще всего требуется вашему агенту? <span class="opt">можно несколько</span></legend>
+          <fieldset class="field picks-field">
+            <legend>Что чаще всего требуется вашему агенту? <span class="opt">необязательно, можно несколько</span></legend>
             <div class="picks">
               <label><input type="checkbox" name="needs" value="datasets"><span>Платные датасеты</span></label>
               <label><input type="checkbox" name="needs" value="business_data"><span>Данные о компаниях и судах</span></label>
@@ -559,13 +559,13 @@ tools/call <span class="k">orders.create</span>
           </fieldset>
           <div class="field"><label for="vendors">Какими платными сервисами уже пользуется агент? <span class="opt">необязательно</span></label>
             <input type="text" id="vendors" name="vendors" placeholder="например: RunPod, SerpAPI, OpenAI"></div>
-          <div class="field range-field"><label for="costRange">Средняя стоимость ресурсов, необходимых агенту для выполнения заказа</label>
+          <div class="field range-field"><label for="costRange">Средняя стоимость ресурсов, необходимых агенту для выполнения заказа <span class="opt">необязательно</span></label>
             <p class="range-val empty" id="costVal">сдвиньте ползунок</p>
             <input type="range" class="cost-range" id="costRange" name="cost_pos" data-kind="range-required" min="0" max="12" step="1" value="6"
               data-values="0.1,0.25,0.5,1,2,5,10,25,50,100,250,500,1000" aria-describedby="costVal">
             <div class="range-ticks" aria-hidden="true"><span style="left:0">$0.10</span><span style="left:25%">$1</span><span style="left:50%">$10</span><span style="left:75%">$100</span><span style="left:100%">$1000+</span></div>
             <input type="hidden" id="cost" name="cost"><input type="hidden" id="costUsd" name="cost_usd"></div>
-          <div class="field"><label for="orders">Ваш агент уже выполняет платные заказы?</label>
+          <div class="field"><label for="orders">Ваш агент уже выполняет платные заказы? <span class="opt">необязательно</span></label>
             <select id="orders" name="orders">
               <option value="" disabled selected>Выберите</option>
               <option value="regular">Да, регулярно</option>
@@ -573,7 +573,7 @@ tools/call <span class="k">orders.create</span>
               <option value="negotiating">Пока нет — есть договорённости</option>
               <option value="none">Пока нет — агент ещё строится</option>
             </select></div>
-          <div class="field"><label for="rails">Как удобнее платить?</label>
+          <div class="field"><label for="rails">Как удобнее платить? <span class="opt">необязательно</span></label>
             <p class="field-hint">От ответов зависит, какие платёжные рельсы мы подключим первыми.</p>
             <select id="rails" name="rails">
               <option value="" disabled selected>Выберите</option>
@@ -632,7 +632,7 @@ tools/call <span class="k">orders.create</span>
     </div>
     <a href="https://t.me/+g5VipBrujTc2ZDIy" class="tg-link" target="_blank" rel="noopener">Telegram-канал →</a>
   </div>
-  <div class="wrap foot-in" style="margin-top:8px;"><span>© 2026 eveningchairs</span><a href="/ru/b2ai/" class="tg-link">Что такое B2AI дистрибьютор? →</a></div>
+  <div class="wrap foot-in" style="margin-top:8px;"><span>© 2026 eveningchairs Ltd</span><a href="/ru/b2ai/" class="tg-link">Что такое B2AI дистрибьютор? →</a></div>
 </footer>
 
 <script src="/script.js"></script>

@@ -26,6 +26,15 @@ function track(name, props) {
   try { if (window.posthog) posthog.capture(name, props || {}); } catch (e) {}
 }
 
+/* internal traffic: open any page once with ?me=1 (or ?me=0 to undo) on each
+   of your own browsers — PostHog remembers the choice in that browser */
+try {
+  if (window.posthog) {
+    if (/[?&]me=1\b/.test(location.search)) posthog.opt_out_capturing();
+    if (/[?&]me=0\b/.test(location.search)) posthog.opt_in_capturing();
+  }
+} catch (e) {}
+
 /* every event carries the page language, so EN and RU split cleanly */
 try { if (window.posthog) posthog.register({ lang: LANG }); } catch (e) {}
 
@@ -82,7 +91,9 @@ var TG_RE    = /^@?[A-Za-z0-9_]{5,32}$/;
     });
   });
 
-  /* rules: every <select> is required; type=email must be an email;
+  /* rules (contact-first since 2026-10-03): only the contact is required —
+     selects, the slider, the needs boxes and the agent reply are optional;
+     an untouched slider records no cost; type=email must be an email;
      data-kind="contact" accepts an email or a Telegram @username;
      data-kind="agent-json" must contain a JSON object (checked separately);
      data-kind="range-required" — the slider has to be moved at least once;
@@ -91,9 +102,9 @@ var TG_RE    = /^@?[A-Za-z0-9_]{5,32}$/;
      Fields inside a [hidden] panel (the answer mode not in use) are skipped. */
   function invalid(el) {
     if (el.type === 'checkbox') return false;
-    if (el.dataset.kind === 'range-required') return el.dataset.touched !== '1';
+    if (el.dataset.kind === 'range-required') return false;
     var v = el.value.trim();
-    if (el.tagName === 'SELECT') return !v;
+    if (el.tagName === 'SELECT') return false;
     if (el.type === 'email') return !EMAIL_RE.test(v);
     if (el.dataset.kind === 'contact') return !EMAIL_RE.test(v) && !TG_RE.test(v);
     return false;
@@ -136,7 +147,7 @@ var TG_RE    = /^@?[A-Za-z0-9_]{5,32}$/;
       if (active[i].dataset.kind === 'agent-json') { answer = active[i]; continue; }
       if (invalid(active[i])) { fail(active[i]); return; }
     }
-    if (answer) {
+    if (answer && answer.value.trim()) {
       var err = document.getElementById('agentErr');
       parsed = parseAgent(answer.value);
       if (err) err.hidden = !!parsed;
@@ -159,6 +170,9 @@ var TG_RE    = /^@?[A-Za-z0-9_]{5,32}$/;
         payload[el.name] = el.value.trim();
       }
     });
+    // an untouched slider is not an answer — don't let its default position look like one
+    var cr = document.getElementById('costRange');
+    if (cr && 'cost_pos' in payload && cr.dataset.touched !== '1') payload.cost_pos = '';
     if (parsed) {                                                     // agent answers land in the same columns
       ['needs', 'vendors', 'cost', 'cost_usd', 'orders', 'rails'].forEach(function (k) {
         if (parsed[k] != null) payload[k] = Array.isArray(parsed[k]) ? parsed[k].join(', ') : String(parsed[k]);
