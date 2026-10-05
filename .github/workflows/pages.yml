@@ -1,0 +1,52 @@
+# Push to main -> rebuild sitemap.xml from the pages -> deploy GitHub Pages -> ping IndexNow.
+# Requires: repo Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # full history: lastmod dates and the list of changed pages
+
+      - name: Build sitemap.xml from the pages
+        run: python3 tools/build_sitemap.py
+
+      - name: Assemble the site (repo minus tooling and docs)
+        run: |
+          mkdir _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'tools' --exclude '_site' \
+                   --exclude 'OPERATIONS.md' --exclude '.gitignore' --exclude '.DS_Store' ./ _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Tell IndexNow which pages changed
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: python3 tools/indexnow.py
