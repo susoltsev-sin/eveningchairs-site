@@ -551,6 +551,7 @@ tools/call <span class="k">orders.create</span>
               <label><input type="checkbox" name="needs" value="llm_api"><span>LLM API</span></label>
               <label><input type="checkbox" name="needs" value="search_scraping"><span>Поиск и парсинг</span></label>
               <label><input type="checkbox" name="needs" value="speech_translation"><span>Речь и перевод</span></label>
+              <label><input type="checkbox" name="needs" value="other"><span>Генерация видео и изображений</span></label>
               <label><input type="checkbox" name="needs" value="gpu_inference"><span>GPU: инференс, рендер</span></label>
               <label><input type="checkbox" name="needs" value="gpu_training"><span>GPU: обучение, fine-tune</span></label>
               <label><input type="checkbox" name="needs" value="vms"><span>Виртуальные машины</span></label>
@@ -595,7 +596,7 @@ tools/call <span class="k">orders.create</span>
 Верни ТОЛЬКО JSON, без пояснений:
 {
   "task": "одно предложение: какую работу ты выполняешь и для кого",
-  "needs": ["что тебе чаще всего требуется, одно или несколько: datasets | business_data | llm_api | search_scraping | speech_translation | gpu_inference | gpu_training | vms | other"],
+  "needs": ["что тебе чаще всего требуется, одно или несколько: datasets | business_data | llm_api | search_scraping | speech_translation | video_or_image_generation | gpu_inference | gpu_training | vms | other"],
   "vendors": "какими платными сервисами пользуешься, через запятую",
   "cost_usd": "средняя стоимость ресурсов на один заказ в долларах, числом (например 0.3 или 40), или unknown",
   "orders": "выполняешь ли платные заказы: regular | first | negotiating | none | unknown",
