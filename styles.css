@@ -536,3 +536,11 @@ section.green + section{border-top-color:var(--green);}
   header.page-head{min-height:0; display:block; padding:18px 0 8px;}
   header.page-head > .wrap, header.page-head .card, header.page-head .card-inner{display:block;}
 }
+/* "launch postponed" note: hover (tap on touch) shows a 600x600 meme under the cursor — script.js, section 3 */
+.ec-meme{cursor:help; border-bottom:1px dashed currentColor; outline:none;}
+.ec-meme:focus-visible{outline:2px solid var(--sage); outline-offset:3px;}
+.ec-meme-pop{position:fixed; left:0; top:0; z-index:100; width:600px; height:600px; display:flex; flex-direction:column; background:var(--paper); border:2px solid var(--ink); box-shadow:8px 8px 0 var(--sage); pointer-events:none; opacity:0; visibility:hidden; transition:opacity .12s, visibility .12s;}
+.ec-meme-pop.on{opacity:1; visibility:visible;}
+.ec-meme-pop img{display:block; width:100%; flex:1 1 auto; min-height:0; object-fit:cover; object-position:center; background:var(--paper-2);}
+.ec-meme-pop p{flex:0 0 52px; display:flex; align-items:center; justify-content:center; margin:0; padding:0 14px; border-top:1px solid var(--line); font-family:"JetBrains Mono",monospace; font-size:13px; line-height:1.3; color:var(--ink-soft); text-align:center;}
+@media(max-width:640px){ .ec-meme-pop p{flex-basis:40px; font-size:11.5px;} }

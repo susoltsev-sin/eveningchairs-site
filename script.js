@@ -480,3 +480,79 @@ var maxScrollPct = 0;
   });
   window.addEventListener('pagehide', ping);
 })();
+
+/* ======================================================================== */
+/* 3. LAUNCH-POSTPONED MEME                                                  */
+/* ======================================================================== */
+/* Hovering the "launch postponed" note (.ec-meme in the hero) shows a 600x600
+   meme right under the cursor and follows it. Touch screens have no hover:
+   a tap toggles it just below the note, a tap anywhere else or a scroll hides it.
+   The image path, caption and alt text come from the note's data-* attributes,
+   so EN and RU pages each point at their own picture.                        */
+
+(function () {
+  var trig = document.querySelector('.ec-meme');
+  if (!trig) return;
+
+  var pop = document.createElement('div');
+  pop.className = 'ec-meme-pop';
+  pop.id = 'ecMemePop';
+  pop.setAttribute('role', 'tooltip');
+  var img = document.createElement('img');
+  img.alt = trig.getAttribute('data-meme-alt') || '';
+  img.decoding = 'async';
+  var cap = document.createElement('p');
+  cap.textContent = trig.getAttribute('data-meme-cap') || '';
+  pop.appendChild(img);
+  pop.appendChild(cap);
+  document.body.appendChild(pop);
+  trig.setAttribute('aria-describedby', 'ecMemePop');
+
+  function load() { if (!img.getAttribute('src')) img.src = trig.getAttribute('data-meme'); }
+  // warm the picture once the page has settled, so the first hover is instant
+  window.addEventListener('load', function () { setTimeout(load, 1500); });
+
+  var GAP = 18, PAD = 8, seen = false;
+  function side() { return Math.min(600, window.innerWidth - 2 * PAD, window.innerHeight - 2 * PAD); }
+  function put(left, top, s) {
+    pop.style.width = pop.style.height = s + 'px';
+    pop.style.left = Math.round(left) + 'px';
+    pop.style.top = Math.round(top) + 'px';
+  }
+  // below-right of the cursor; flips left / above when it would leave the window
+  function atCursor(x, y) {
+    var s = side(), left = x + GAP, top = y + GAP;
+    if (left + s > window.innerWidth - PAD) left = Math.max(PAD, x - GAP - s);
+    if (top + s > window.innerHeight - PAD) top = Math.max(PAD, y - GAP - s);
+    put(left, top, s);
+  }
+  // centred horizontally, just under the note (or above it if there is no room)
+  function underNote() {
+    var s = side(), r = trig.getBoundingClientRect(), top = r.bottom + 10;
+    if (top + s > window.innerHeight - PAD) top = Math.max(PAD, r.top - 10 - s);
+    put((window.innerWidth - s) / 2, top, s);
+  }
+  function show() {
+    load();
+    pop.classList.add('on');
+    if (!seen) { seen = true; track('meme_view'); }
+  }
+  function hide() { pop.classList.remove('on'); }
+  function isOn() { return pop.classList.contains('on'); }
+
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    trig.addEventListener('mouseenter', function (e) { atCursor(e.clientX, e.clientY); show(); });
+    trig.addEventListener('mousemove', function (e) { atCursor(e.clientX, e.clientY); });
+    trig.addEventListener('mouseleave', hide);
+    trig.addEventListener('focus', function () { if (!isOn()) { underNote(); show(); } });  // keyboard
+    trig.addEventListener('blur', hide);
+  } else {
+    trig.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (isOn()) { hide(); return; }
+      underNote(); show();
+    });
+    document.addEventListener('click', hide);
+    window.addEventListener('scroll', hide, { passive: true });
+  }
+})();
